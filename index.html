@@ -5,8 +5,6 @@
    <meta name="viewport"
          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-   <script defer src="js/vue.js"></script>
-   <script defer src="js/main.js"></script>
    <link rel="stylesheet" href="css/main.css">
    <title>Product App</title>
 </head>
@@ -17,11 +15,11 @@
    <div class="product">
 
        <div class="product-image">
-           <img :src="image" :alt="altText"/>
+           <img :src="image" :alt="product"/>
        </div>
 
        <div class="product-info">
-            <h1>{{ product }}</h1>
+            <h1>{{ title }}</h1>
 
             <span v-if="onSale" class="sale"> On sale </span>
 
@@ -36,13 +34,13 @@
                 <li v-for="detail in details">{{ detail }}</li>
             </ul>
 
-            <div class="color-box" v-for="variant in variants" 
+            <div class="color-box" v-for="(variant, index) in variants" 
                 :key="variant.variantId" 
                 :style="{ backgroundColor:variant.variantColor }"
-                @mouseover="updateProduct(variant.variantImage)"
-                    {{ variant.variantColor }}>
+                @mouseover="updateProduct(index)">
+
+            </div>    
                 
-            </div>
 
             <h2>choose size</h2>
             <ul> 
@@ -70,6 +68,7 @@
    </div>
 </div>
 
-
+   <script defer src="js/vue.js"></script>
+   <script defer src="js/main.js"></script>
 </body>
 </html>
