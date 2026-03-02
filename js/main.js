@@ -61,10 +61,7 @@ Vue.component('product', {
             <ul> 
                 <li v-for="size in sizes" :key="size">{{ size }}</li>
             </ul>
-
-            <div class="cart">
-                <p>Cart {{ cart }}</p>
-            </div>    
+   
                 <button
                 v-on:click="addToCart"
                 :disabled="!inStock"
@@ -72,9 +69,12 @@ Vue.component('product', {
                 Add to cart
                 </button>
 
-            <div class="deleteToCart">
-                <button v-on:click="deleteToCart">Delete to cart</button>
-            </div>
+                <button
+                v-on:click="deleteToCart"
+                :disabled="!inStock"
+                class="delete-button">
+                Remove from cart
+                </button>
        </div>
    </div>
    `,
@@ -105,7 +105,6 @@ Vue.component('product', {
         ],
 
         sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
-        cart: 0
     }
     },
 
@@ -143,14 +142,13 @@ Vue.component('product', {
 
     methods:{
         addToCart() {
-            this.cart += 1
+            this.$emit('add-to-cart',
+            this.variants[this.selectedVariant].variantId);
         },
 
         deleteToCart() {
-            if (this.cart > 0) {
-                this.cart -= 1
-            }
-        },          
+            this.$emit('delete-to-cart', this.variants[this.selectedVariant].variantId)
+        },
 
         updateProduct (index) {
             this.selectedVariant = index
@@ -163,6 +161,19 @@ Vue.component('product', {
     let app = new Vue({
         el: '#app',
         data: {
-            premium: true
+            premium: true,
+            cart: []
+        },
+        methods: {
+            updateCart(id) {
+                this.cart.push(id);
+            },
+
+            deleteToCart(id) {
+                const index = this.cart.indexOf(id)
+                if (index !== -1) {
+                    this.cart.splice(index, 1)
+                }
+            }
         }
     })
