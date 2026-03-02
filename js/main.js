@@ -7,7 +7,7 @@ let app = new Vue({
        selectedVariant: 0,
        link: "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords",
        inventory: 100,
-       onSale: true,
+       onSale: false,
        details: ['80% cotton', '20% polyester', 'Gender-neutral'],
        variants: [
         {
@@ -41,6 +41,14 @@ let app = new Vue({
         title() {
             return this.brand + ' ' + this.product;
         },
+
+        sale() {
+            if(this.onSale) {
+                return this.brand + ' ' + this.product + ' is on sale ^_^'
+            } else {
+                return this.brand + ' ' + this.product + ' is not on sale -_-'
+            }
+        }
 
     },
 
