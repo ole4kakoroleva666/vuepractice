@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport"
+         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <script defer src="js/vue.js"></script>
+   <script defer src="js/main.js"></script>
+   <link rel="stylesheet" href="css/main.css">
+   <title>Product App</title>
+</head>
+<body>
+
+<div id="app">
+
+   <div class="product">
+
+       <div class="product-image">
+           <img alt="#" v-bind:src="image"/>
+       </div>
+
+       <div class="product-info">
+            <h1>{{ product }}</h1>
+
+            <span v-if="onSale" class="sale"> On sale </span>
+
+            <p> {{ description }}</p>
+
+            <a v-bind:href="link"> More products like this </a>
+
+            <p v-if="inventory > 10">In stock</p>
+            <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
+            <p v-else>Out of stock</p>
+
+            <ul>
+                <li v-for="detail in details">{{ detail }}</li>
+            </ul>
+
+            <div v-for="variant in variants" :key="variant.variantId">
+                <p @mouseover="updateProduct(variant.variantImage)">
+                    {{ variant.variantColor }}</p>
+            </div>
+
+            <h2>choose size</h2>
+            <ul> 
+                <li v-for="size in sizes" :key="size">{{ size }}</li>
+
+            </ul>
+
+            <div class="cart">
+                <p>Cart {{ cart }}</p>
+            </div>    
+                <button v-on:click="addToCart">Add to cart</button>
+
+            <div class="deleteToCart">
+                <button v-on:click="deleteToCart">Delete to cart</button>
+            </div>
+
+
+       </div>
+
+
+   </div>
+</div>
+
+
+</body>
+</html>
