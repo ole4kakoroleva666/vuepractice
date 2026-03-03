@@ -129,25 +129,75 @@ Vue.component('product-tabs', {
        <div v-show="selectedTab === 'Make a Review'">
          <product-review></product-review>
        </div>
+
+        <div v-show="selectedTab === 'Shipping'">
+            <h3>Shipping information</h3>
+            <p>Shipping cost: {{ shippingCost }}</p>
+            <p v-if="premium">Shipping free for you :)</p>
+            <p v-else>Shipping cost: $2.99</p>
+        </div>
+
+
+        <div v-show="selectedTab == 'Details'">
+            <h3>Product Details</h3>
+            <p>Brand: {{ brand }}</p>
+            <p>Material: {{ details }}</p>
+            <p>Available sizes: {{ sizes }}</p>
+        </div>    
+
      </div>
 
 
  `,
 
     props: {
+
         reviews: {
-            type: Array,
-            required: true
-        }
+        type: Array,
+        required: true
+    },
+
+
+    premium: {
+        type: Boolean,
+        required: true
+    },
+
+    details: {
+        type: Array,
+        required: true
+    },
+
+    brand: {
+        type: String,
+        required: true
+    },
+
+    sizes: {
+        type: Array,
+        required: true
+    }
+
     },
 
 
    data() {
        return {
-           tabs: ['Reviews', 'Make a Review'],
+           tabs: ['Reviews', 'Make a Review', 'Shipping', 'Details'],
            selectedTab: 'Reviews'
        }
    },
+
+   computed: {
+
+        shippingCost() {
+            return this.premium ? 'Free' : '$2.99'
+        },
+
+        productDetails() {
+            return [ 'Size:' + this.sizes.join(', ')]
+        }
+   }
 
 })
 
@@ -215,7 +265,13 @@ Vue.component('product', {
             
         </div>
 
-        <product-tabs :reviews="reviews"></product-tabs>
+        <product-tabs 
+                :reviews="reviews"
+                :premium="premium"
+                :details="details"
+                :brand="brand"
+                :sizes="sizes">
+        </product-tabs>
 
     </div>
    `,
