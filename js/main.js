@@ -9,7 +9,7 @@ Vue.component('product-details', {
         }
     },
 
-    template:`
+    template: `
     <ul>
         <li v-for ="detail in details"> {{ detail }} </li>
     </ul>
@@ -18,7 +18,7 @@ Vue.component('product-details', {
 })
 
 Vue.component('product-review', {
-    template:`
+    template: `
         <form class="review-form" @submit.prevent="onSubmit">
             <p v-if="errors.length">
                 <b>Please correct the following error(s):</b>
@@ -79,10 +79,16 @@ Vue.component('product-review', {
         }
     },
 
-    methods:{
+    methods: {
         onSubmit() {
             this.errors = []
-            if(this.name && this.review && this.rating && this.recommend) {
+
+            if (this.rating >= 4 && this.recommend === 'no') {
+                this.errors.push("with a rating of 4 or higher cannot be UNrecommended")
+                return
+            }
+
+            if (this.name && this.review && this.rating && this.recommend) {
                 let productReview = {
                     name: this.name,
                     review: this.review,
@@ -95,10 +101,10 @@ Vue.component('product-review', {
                 this.rating = null
                 this.recommend = null
             } else {
-                if(!this.name) this.errors.push("Name required.")
-                if(!this.review) this.errors.push("Review required.")
-                if(!this.rating) this.errors.push("Rating required.")
-                if(!this.recommend) this.errors.push("Tell if you recommend this product")    
+                if (!this.name) this.errors.push("Name required.")
+                if (!this.review) this.errors.push("Review required.")
+                if (!this.rating) this.errors.push("Rating required.")
+                if (!this.recommend) this.errors.push("Tell if you recommend this product")
             }
         }
 
@@ -107,7 +113,7 @@ Vue.component('product-review', {
 })
 
 Vue.component('product-tabs', {
-   template: `
+    template: `
     <div>   
        <ul>
          <span class="tab"
@@ -153,51 +159,51 @@ Vue.component('product-tabs', {
     props: {
 
         reviews: {
-        type: Array,
-        required: true
+            type: Array,
+            required: true
+        },
+
+
+        premium: {
+            type: Boolean,
+            required: true
+        },
+
+        details: {
+            type: Array,
+            required: true
+        },
+
+        brand: {
+            type: String,
+            required: true
+        },
+
+        sizes: {
+            type: Array,
+            required: true
+        }
+
     },
 
 
-    premium: {
-        type: Boolean,
-        required: true
+    data() {
+        return {
+            tabs: ['Reviews', 'Make a Review', 'Shipping', 'Details'],
+            selectedTab: 'Reviews'
+        }
     },
 
-    details: {
-        type: Array,
-        required: true
-    },
-
-    brand: {
-        type: String,
-        required: true
-    },
-
-    sizes: {
-        type: Array,
-        required: true
-    }
-
-    },
-
-
-   data() {
-       return {
-           tabs: ['Reviews', 'Make a Review', 'Shipping', 'Details'],
-           selectedTab: 'Reviews'
-       }
-   },
-
-   computed: {
+    computed: {
 
         shippingCost() {
             return this.premium ? 'Free' : '$2.99'
         },
 
         productDetails() {
-            return [ 'Size:' + this.sizes.join(', ')]
+            return ['Size:' + this.sizes.join(', ')]
         }
-   }
+    }
 
 })
 
@@ -276,34 +282,33 @@ Vue.component('product', {
     </div>
    `,
 
-   data () {
-    return {
-       product: "Socks",
-       brand: 'Vue Mastery',
-       description: "A pair of warm, fuzzy socks",
-       selectedVariant: 0,
-       link: "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords",
-       inventory: 100,
-       onSale: false,
-       details: ['80% cotton', '20% polyester', 'Gender-neutral'],
-       variants: [
-        {
-            variantId: 2234,
-            variantColor: 'green',
-            variantImage: "./assets/vmSocks-green-onWhite.jpg",
-            variantQuantity: 10
-        },
-        {
-            variantId: 2235,
-            variantColor: 'blue',
-            variantImage: "./assets/vmSocks-blue-onWhite.jpg",
-            variantQuantity: 0
-        }
-        ],
+    data() {
+        return {
+            product: "Socks",
+            brand: 'Vue Mastery',
+            description: "A pair of warm, fuzzy socks",
+            selectedVariant: 0,
+            link: "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords",
+            inventory: 100,
+            onSale: false,
+            details: ['80% cotton', '20% polyester', 'Gender-neutral'],
+            variants: [{
+                    variantId: 2234,
+                    variantColor: 'green',
+                    variantImage: "./assets/vmSocks-green-onWhite.jpg",
+                    variantQuantity: 10
+                },
+                {
+                    variantId: 2235,
+                    variantColor: 'blue',
+                    variantImage: "./assets/vmSocks-blue-onWhite.jpg",
+                    variantQuantity: 0
+                }
+            ],
 
-        sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
-        reviews: []
-    }
+            sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+            reviews: []
+        }
     },
 
     computed: {
@@ -321,7 +326,7 @@ Vue.component('product', {
         },
 
         sale() {
-            if(this.onSale) {
+            if (this.onSale) {
                 return this.brand + ' ' + this.product + ' is on sale ^_^'
             } else {
                 return this.brand + ' ' + this.product + ' is not on sale -_-'
@@ -329,7 +334,7 @@ Vue.component('product', {
         },
 
         shipping() {
-            if(this.premium) {
+            if (this.premium) {
                 return "Free"
             } else {
                 return 2.99
@@ -338,47 +343,61 @@ Vue.component('product', {
 
     },
 
-    methods:{
+    methods: {
         addToCart() {
             this.$emit('add-to-cart',
-            this.variants[this.selectedVariant].variantId);
+                this.variants[this.selectedVariant].variantId);
         },
 
         deleteToCart() {
             this.$emit('delete-to-cart', this.variants[this.selectedVariant].variantId)
         },
 
-        updateProduct (index) {
+        updateProduct(index) {
             this.selectedVariant = index
-            console.log(this.variants[index].variantQuantity > 0)   
+            console.log(this.variants[index].variantQuantity > 0)
+        },
+
+        saveReviews() {
+            localStorage.setItem('productReviews', JSON.stringify(this.reviews))
+        },
+
+        loadReviews() {
+            const savedReviews = localStorage.getItem('productReviews')
+            if (savedReviews) {
+                this.reviews = JSON.parse(savedReviews)
+            }
         }
+
     },
 
     mounted() {
-   eventBus.$on('review-submitted', productReview => {
-       this.reviews.push(productReview)
-   })
-}
 
-       
+        this.loadReviews()
+
+        eventBus.$on('review-submitted', productReview => {
+            this.reviews.push(productReview)
+            this.saveReviews()
+        })
+    }
 })
 
-    let app = new Vue({
-        el: '#app',
-        data: {
-            premium: true,
-            cart: []
+let app = new Vue({
+    el: '#app',
+    data: {
+        premium: true,
+        cart: []
+    },
+    methods: {
+        updateCart(id) {
+            this.cart.push(id);
         },
-        methods: {
-            updateCart(id) {
-                this.cart.push(id);
-            },
 
-            deleteToCart(id) {
-                const index = this.cart.indexOf(id)
-                if (index !== -1) {
-                    this.cart.splice(index, 1)
-                }
+        deleteToCart(id) {
+            const index = this.cart.indexOf(id)
+            if (index !== -1) {
+                this.cart.splice(index, 1)
             }
         }
-    })
+    }
+})
